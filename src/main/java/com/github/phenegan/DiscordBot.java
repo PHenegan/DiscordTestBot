@@ -62,7 +62,8 @@ public final class DiscordBot {
         //Flips a coin and returns result
         commands.put("coinflip", event -> {
             int randNum = (int)(Math.random() * 2);
-            event.getMessage().getChannel().block()
+            event.getMessage()
+                    .getChannel().block()
                     .createMessage(randNum == 0 ? "Heads!" : "Tails!").block();
         });
 

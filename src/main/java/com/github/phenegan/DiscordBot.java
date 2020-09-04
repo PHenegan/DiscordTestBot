@@ -36,9 +36,11 @@ public final class DiscordBot {
                         }
                     }
 
-                    boolean isAdmin = event.getMember().get().getBasePermissions().block().contains(Permission.ADMINISTRATOR);
-
                     //commands that can only be run by admins are checked separately
+                    boolean isAdmin = event.getMember().get()
+                            .getBasePermissions().block()
+                            .contains(Permission.ADMINISTRATOR);
+
                     if (isAdmin)
                         for (final Map.Entry<String, Command> entry : adminCommands.entrySet())
                             if (content.startsWith("!" + entry.getKey())) {
@@ -50,21 +52,29 @@ public final class DiscordBot {
     }
 
     static {
+        //basic command test
         commands.put("ping", event -> {
             event.getMessage()
                     .getChannel().block()
                     .createMessage("Pong!").block();
         });
+
+        //Flips a coin and returns result
         commands.put("coinflip", event -> {
             int randNum = (int)(Math.random() * 2);
             event.getMessage().getChannel().block()
                     .createMessage(randNum == 0 ? "Heads!" : "Tails!").block();
         });
 
+        //Clears the chat in the channel the command is run in
         adminCommands.put("clear", event -> {
             Message command = event.getMessage();
-            command.getChannel().block().getMessagesBefore(command.getId())
+            //deletes every message prior to the command
+            command.getChannel().block()
+                    .getMessagesBefore(command.getId())
                     .doOnEach(messageSignal -> messageSignal.get().delete().block()).subscribe();
+
+            //deletes the command
             command.delete().block();
         });
     }

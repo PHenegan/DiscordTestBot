@@ -1,0 +1,7 @@
+#user-specific/build files
+build/*
+.idea/*
+
+#auto-import is enabled on Grade, so these are ignored
+*.iml
+*.ipr
